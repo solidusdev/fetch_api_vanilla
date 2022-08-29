@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./style.css" rel="stylesheet">
+    <title>Fetch</title>
+</head>
+<body>
+    <h1 class="spacing">Using Fetch API</h1>
+    <p class="spacing">Use this button to populate data</p>
+    <button onclick="render_users()">click</button>
+    <div class="container spacing"></div>
+</body>
+
+<script>
+
+    async function get_users() {
+        let url = "https://randomuser.me/api/?results=2";
+        try {
+            let response = await fetch(url);
+            return await response.json();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function render_users() {
+        
+        let data_array = [];    // create an empty array
+        let users = await get_users();  // returns an object
+        data_array.push(users); // push that returned object into the empty array
+        let html = '';
+
+        data_array.forEach(data => {
+            let html_segment = `<div class="user"> 
+                                    <h1>${ data.results[0]["name"]["first"] } ${ data.results[0]["name"]["last"] }</h1>
+                                    <img src="${ data.results[0]["picture"]["large"] }" alt="random user" class="spacing" />
+                                </div>`;
+
+            html += html_segment;
+        });
+
+        let container = document.querySelector(".container");
+        container.innerHTML = html;
+    }
+</script>
+</html>
